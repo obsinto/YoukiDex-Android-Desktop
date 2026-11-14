@@ -1,0 +1,37 @@
+RootTask id=263 bounds=[0,0][2560,1600] displayId=0 userId=0
+ configuration={1.0 ?mcc0mnc [en_US] ldltr sw711dp w1138dp h711dp 360dpi lrg land night finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 2560, 1600) mAppBounds=Rect(0, 0 - 2560, 1600) mMaxBounds=Rect(0, 0 - 2560, 1600) mDisplayRotation=ROTATION_90 mWindowingMode=fullscreen mActivityType=standard mAlwaysOnTop=undefined mRotation=ROTATION_90 mInSplitScreen=false letterBoxed=false foScaled=false isSpecificEmbedded=false embeddingScale=1.0} as.8 s.3095 fontWeightAdjustment=0/d/0 themeChanged=0 themeChangedFlags=0 display=0 extraData = Bundle[{}] screenType=0/0}
+  taskId=263: com.youki.dex/com.youki.dex.activities.SplashActivity bounds=[0,0][2560,1600] userId=0 visible=true topActivity=ComponentInfo{com.youki.dex/com.youki.dex.activities.LauncherActivity}
+
+RootTask id=268 bounds=[0,0][2560,1600] displayId=0 userId=0
+ configuration={1.0 ?mcc0mnc [en_US] ldltr sw711dp w1138dp h711dp 360dpi lrg land night finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 2560, 1600) mAppBounds=Rect(0, 0 - 2560, 1600) mMaxBounds=Rect(0, 0 - 2560, 1600) mDisplayRotation=ROTATION_90 mWindowingMode=fullscreen mActivityType=standard mAlwaysOnTop=undefined mRotation=ROTATION_90 mInSplitScreen=false letterBoxed=false foScaled=false isSpecificEmbedded=false embeddingScale=1.0} as.8 s.3095 fontWeightAdjustment=0/d/0 themeChanged=0 themeChangedFlags=0 display=0 extraData = Bundle[{}] screenType=0/0}
+  taskId=268: com.android.vending/com.google.android.finsky.activities.MainActivityPrivate bounds=[0,0][2560,1600] userId=0 visible=false topActivity=ComponentInfo{com.android.vending/com.google.android.finsky.activities.MainActivityPrivate}
+
+RootTask id=265 bounds=[0,0][2560,1600] displayId=0 userId=0
+ configuration={1.0 ?mcc0mnc [en_US] ldltr sw711dp w1138dp h711dp 360dpi lrg land night finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 2560, 1600) mAppBounds=Rect(0, 0 - 2560, 1600) mMaxBounds=Rect(0, 0 - 2560, 1600) mDisplayRotation=ROTATION_90 mWindowingMode=fullscreen mActivityType=standard mAlwaysOnTop=undefined mRotation=ROTATION_90 mInSplitScreen=false letterBoxed=false foScaled=false isSpecificEmbedded=false embeddingScale=1.0} as.8 s.3095 fontWeightAdjustment=0/d/0 themeChanged=0 themeChangedFlags=0 display=0 extraData = Bundle[{}] screenType=0/0}
+  taskId=265: moe.shizuku.privileged.api/moe.shizuku.manager.MainActivity bounds=[0,0][2560,1600] userId=0 visible=false topActivity=ComponentInfo{moe.shizuku.privileged.api/moe.shizuku.manager.MainActivity}
+
+RootTask id=1 bounds=[0,0][2560,1600] displayId=0 userId=0
+ configuration={1.0 ?mcc0mnc [en_US] ldltr sw711dp w1138dp h711dp 360dpi lrg land night finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 2560, 1600) mAppBounds=Rect(0, 0 - 2560, 1600) mMaxBounds=Rect(0, 0 - 2560, 1600) mDisplayRotation=ROTATION_90 mWindowingMode=fullscreen mActivityType=home mAlwaysOnTop=undefined mRotation=ROTATION_90 mInSplitScreen=false letterBoxed=false foScaled=false isSpecificEmbedded=false embeddingScale=1.0} as.8 s.3095 fontWeightAdjustment=0/d/0 themeChanged=0 themeChangedFlags=0 display=0 extraData = Bundle[{}] screenType=0/0}
+  taskId=2: com.miui.home/com.miui.home.launcher.Launcher bounds=[0,0][2560,1600] userId=0 visible=false topActivity=ComponentInfo{com.miui.home/com.miui.home.launcher.Launcher}
+
+RootTask id=254 bounds=[0,0][2560,1600] displayId=0 userId=0
+ configuration={1.0 ?mcc0mnc [en_US] ldltr sw711dp w1138dp h711dp 360dpi lrg land night finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 2560, 1600) mAppBounds=Rect(0, 0 - 2560, 1600) mMaxBounds=Rect(0, 0 - 2560, 1600) mDisplayRotation=ROTATION_90 mWindowingMode=fullscreen mActivityType=standard mAlwaysOnTop=on mRotation=ROTATION_90 mInSplitScreen=false letterBoxed=false foScaled=false isSpecificEmbedded=false embeddingScale=1.0} as.8 s.3095 fontWeightAdjustment=0/d/0 themeChanged=0 themeChangedFlags=0 display=0 extraData = Bundle[{}] screenType=0/0}
+  taskId=254: com.android.settings/com.android.settings.MainSettings bounds=[0,0][2560,1600] userId=0 visible=false topActivity=ComponentInfo{com.android.thememanager/com.android.thememanager.settings.WallpaperSettingsActivity}
+
+RootTask id=261 bounds=[0,0][2560,1600] displayId=0 userId=0
+ configuration={1.0 ?mcc0mnc [en_US] ldltr sw711dp w1138dp h711dp 360dpi lrg land night finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 2560, 1600) mAppBounds=Rect(0, 0 - 2560, 1600) mMaxBounds=Rect(0, 0 - 2560, 1600) mDisplayRotation=ROTATION_90 mWindowingMode=fullscreen mActivityType=standard mAlwaysOnTop=undefined mRotation=ROTATION_90 mInSplitScreen=false letterBoxed=false foScaled=false isSpecificEmbedded=false embeddingScale=1.0} as.8 s.3095 fontWeightAdjustment=0/d/0 themeChanged=0 themeChangedFlags=0 display=0 extraData = Bundle[{}] screenType=0/0}
+  taskId=261: example.browser/.MainActivity bounds=[0,0][2560,1600] userId=0 visible=false topActivity=ComponentInfo{example.browser/.MainActivity}
+
+RootTask id=3 bounds=[0,0][2560,1600] displayId=0 userId=0
+ configuration={1.0 ?mcc0mnc [en_US] ldltr sw711dp w1138dp h711dp 360dpi lrg land night finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 2560, 1600) mAppBounds=Rect(0, 0 - 2560, 1600) mMaxBounds=Rect(0, 0 - 2560, 1600) mDisplayRotation=ROTATION_90 mWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=ROTATION_90 mInSplitScreen=false letterBoxed=false foScaled=false isSpecificEmbedded=false embeddingScale=1.0} as.8 s.3095 fontWeightAdjustment=0/d/0 themeChanged=0 themeChangedFlags=0 display=0 extraData = Bundle[{}] screenType=0/0}
+  taskId=4: unknown bounds=[0,0][2560,1600] userId=0 visible=false
+  taskId=5: unknown bounds=[0,2560][1600,3840] userId=0 visible=false
+
+RootTask id=6 bounds=[0,0][2560,1600] displayId=0 userId=0
+ configuration={1.0 ?mcc0mnc [en_US] ldltr sw711dp w1138dp h711dp 360dpi lrg land night finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 2560, 1600) mAppBounds=Rect(0, 0 - 2560, 1600) mMaxBounds=Rect(0, 0 - 2560, 1600) mDisplayRotation=ROTATION_90 mWindowingMode=fullscreen mActivityType=undefined mAlwaysOnTop=undefined mRotation=ROTATION_90 mInSplitScreen=false letterBoxed=false foScaled=false isSpecificEmbedded=false embeddingScale=1.0} as.8 s.3095 fontWeightAdjustment=0/d/0 themeChanged=0 themeChangedFlags=0 display=0 extraData = Bundle[{}] screenType=0/0}
+  taskId=7: unknown bounds=[0,0][2560,1600] userId=0 visible=false
+  taskId=8: unknown bounds=[0,2560][1600,3840] userId=0 visible=false
+
+RootTask id=257 bounds=[0,0][2560,1600] displayId=0 userId=0
+ configuration={1.0 ?mcc0mnc [en_US] ldltr sw711dp w1138dp h711dp 360dpi lrg land night finger -keyb/v/h -nav/h winConfig={ mBounds=Rect(0, 0 - 2560, 1600) mAppBounds=Rect(0, 0 - 2560, 1600) mMaxBounds=Rect(0, 0 - 2560, 1600) mDisplayRotation=ROTATION_90 mWindowingMode=fullscreen mActivityType=standard mAlwaysOnTop=off mRotation=ROTATION_90 mInSplitScreen=false letterBoxed=false foScaled=false isSpecificEmbedded=false embeddingScale=1.0} as.8 s.3095 fontWeightAdjustment=0/d/0 themeChanged=0 themeChangedFlags=0 display=0 extraData = Bundle[{}] screenType=0/0}
+  taskId=257: example.media/.SplashActivity bounds=[0,0][2560,1600] userId=0 visible=false topActivity=ComponentInfo{example.media/.MainActivity}

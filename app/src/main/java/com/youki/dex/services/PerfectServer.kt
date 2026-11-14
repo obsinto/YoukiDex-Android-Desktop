@@ -123,6 +123,8 @@ import java.net.URLEncoder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -207,6 +209,7 @@ class DockService : AccessibilityService(), OnSharedPreferenceChangeListener, On
 
     // Service-scoped coroutine scope — cancelled automatically in onDestroy()
     private val serviceScope = CoroutineScope(Dispatchers.Main + Job())
+    private var taskListRefreshJob: Job? = null
 
     // PERF: Cache interpolators as class-level vals — avoids instantiating a new
     // object on every animation call. On budget CPUs (T606, Helio G35) this alone
@@ -513,7 +516,13 @@ class DockService : AccessibilityService(), OnSharedPreferenceChangeListener, On
             performNavAction("enable_nav_back")
             true
         }
-        homeBtn.setOnClickListener { animateBtn(it) { performGlobalAction(GLOBAL_ACTION_HOME) } }
+        homeBtn.setOnClickListener {
+            animateBtn(it) {
+                startActivity(Intent(context, LauncherActivity::class.java).addFlags(
+                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                ))
+            }
+        }
         homeBtn.setOnLongClickListener {
             performNavAction("enable_nav_home")
             true
@@ -1139,6 +1148,17 @@ class DockService : AccessibilityService(), OnSharedPreferenceChangeListener, On
         // reported as an unwanted automatic switch. Now this respects the
         // same setting from the start instead of forcing it on unconditionally.
         DeviceUtils.hideStatusBar(context, sharedPreferences.getBoolean("hide_status_bar", false))
+        // A background task can close without an accessibility window event.
+        // Keep visible icons current; no task queries while the screen/dock is hidden.
+        if (taskListRefreshJob?.isActive != true) {
+            taskListRefreshJob = serviceScope.launch {
+                val power = getSystemService(POWER_SERVICE) as android.os.PowerManager
+                while (isActive) {
+                    delay(2000)
+                    if (dock.visibility == View.VISIBLE && power.isInteractive) updateRunningTasks()
+                }
+            }
+        }
     }
 
     private fun getAppActions(app: App): ArrayList<Action> {
@@ -3183,6 +3203,8 @@ class DockService : AccessibilityService(), OnSharedPreferenceChangeListener, On
     }
 
     private fun updateRunningTasks(recreateAdapter: Boolean = false) {
+        // Accessibility events may arrive before onServiceConnected creates the bar.
+        if (!::tasksGv.isInitialized) return
         val now = System.currentTimeMillis()
         if (now - lastUpdate < 500 && !recreateAdapter)
             return
@@ -3204,68 +3226,27 @@ class DockService : AccessibilityService(), OnSharedPreferenceChangeListener, On
 
             // heavy IPC happens here, off the main thread
             val fetchedTasks: ArrayList<AppTask> = withContext(Dispatchers.IO) {
-                val useShizukuDetection = sharedPreferences.getBoolean("shizuku_active_app_detection", false)
+                val useShizukuDetection = sharedPreferences.getBoolean("shizuku_active_app_detection", true)
                 val shizuku = com.youki.dex.utils.ShizukoManager.getInstance(applicationContext)
 
                 if (systemApp) {
                     AppUtils.getRunningTasks(activityManager, packageManager, nApps)
                 } else if (useShizukuDetection && shizuku.hasPermission) {
-                    // ── Shizuku متاح: نقدر نعرف التطبيق النشط الحقيقي + التطبيقات
-                    // الشغالة بالخلفية بدون قيود getRunningTasks() على التطبيقات
-                    // العادية. أول شي نجرب نجيب المهام الحقيقية عبر
-                    // getTasksViaShizuku (تشمل freeform/multi-window تطبيقات
-                    // ما تظهر بـ getRunningTasks() العادية)؛ لو فشلت أو رجعت
-                    // فاضية (صلاحية سُحبت بعد الفحص أعلاه، خطأ بتفسير
-                    // مخرجات `am stack list` على ROM معيّن، إلخ) نرجع لقائمة
-                    // الاستخدام الأخير getRecentTasks كـ fallback — نفس
-                    // السلوك القديم قبل هذا التحسين ──
-                    val viaShizuku = AppUtils.getTasksViaShizuku(context, packageManager, nApps)
-                    val recent = viaShizuku ?: AppUtils.getRecentTasks(context, nApps)
+                    // Only real Android tasks belong in this taskbar. If the bridge
+                    // fails, leave it empty rather than substituting usage history.
+                    val recent = AppUtils.getTasksViaShizuku(context, packageManager, nApps)
+                        ?: arrayListOf()
                     shizuku.getForegroundPackage()?.let { fg ->
                         if (fg.isNotEmpty() && fg != packageName &&
                             fg != AppUtils.getCurrentLauncher(packageManager)
-                        ) {
-                            AppUtils.currentApp = fg
-                        }
+                        ) AppUtils.currentApp = fg
                     }
-                    // Bug fix — dock only showed one app as "running" no matter how
-                    // many are actually open. "recent" above is a 24h *usage
-                    // history* list when we fell back to getRecentTasks (see its
-                    // own kdoc — deliberately "recently used", not "currently
-                    // running"), and until now Shizuku was only ever used to
-                    // correct which ONE of those apps gets the foreground/bold-line
-                    // style — nothing checked whether the rest of that
-                    // history list were actually still alive in the
-                    // background, so every icon with any task always drew
-                    // some indicator regardless of real liveness.
-                    //
-                    // The icon list itself stays the full history/task list
-                    // (getRunningPackages() is deliberately NOT used to
-                    // filter fetchedTasks here) — recently-used apps should
-                    // stay visible in the dock even once closed, just
-                    // without any running indicator. What Shizuku actually
-                    // corrects is per-app liveness for the indicator dot/line
-                    // itself: see AppUtils.trulyRunningPackages below, read
-                    // by DockAppAdapter to decide dot vs. line vs. nothing.
-                    shizuku.getRunningPackages().let { running ->
-                        if (running.isNotEmpty()) {
-                            AppUtils.trulyRunningPackages = running.toSet()
-                        }
-                        // Empty result (unexpected dumpsys format on this
-                        // ROM, transient failure, etc.) — leave whatever
-                        // trulyRunningPackages already held rather than
-                        // wiping every indicator out from under a
-                        // momentary hiccup.
-                    }
+                    AppUtils.trulyRunningPackages = recent.map { it.packageName }.toSet()
                     recent
                 } else {
-                    // Shizuku detection off (or unavailable) — no real
-                    // liveness signal to show per-app, so clear any stale
-                    // set from a previous session/toggle rather than letting
-                    // DockAppAdapter draw indicators based on data that's no
-                    // longer being refreshed.
+                    // No privileged connection: do not display stale usage history.
                     AppUtils.trulyRunningPackages = null
-                    AppUtils.getRecentTasks(context, nApps)
+                    arrayListOf()
                 }
             }
 

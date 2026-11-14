@@ -43,7 +43,6 @@ object DeviceUtils {
     const val HEADS_UP_ENABLED = "heads_up_notifications_enabled"
     const val ENABLE_TASKBAR = "enable_taskbar"
     const val SETTING_OVERLAYS = "secure_overlay_settings"
-    private const val SERVICE_NAME = "com.youki.dex/com.youki.dex.services.DockService"
     private const val ENABLED_ACCESSIBILITY_SERVICES = "enabled_accessibility_services"
 
     /**
@@ -923,10 +922,11 @@ object DeviceUtils {
 
     //Service control
     fun enableService(context: Context) {
+        val serviceName = ComponentName(context, DockService::class.java).flattenToString()
         val services = getSecureSetting(context, ENABLED_ACCESSIBILITY_SERVICES, "")
-        if (!services.contains(SERVICE_NAME)) {
+        if (!services.contains(serviceName)) {
             val newServices: String =
-                if (services.isEmpty()) SERVICE_NAME else "$services:$SERVICE_NAME"
+                if (services.isEmpty()) serviceName else "$services:$serviceName"
             putSecureSetting(context, ENABLED_ACCESSIBILITY_SERVICES, newServices)
         }
         // FIX: appending to enabled_accessibility_services alone isn't enough —
@@ -940,16 +940,17 @@ object DeviceUtils {
     }
 
     fun disableService(context: Context) {
+        val serviceName = ComponentName(context, DockService::class.java).flattenToString()
         val services = getSecureSetting(context, ENABLED_ACCESSIBILITY_SERVICES, "")
-        if (!services.contains(SERVICE_NAME)) return
+        if (!services.contains(serviceName)) return
         var newServices = ""
-        if (services.contains("$SERVICE_NAME:")) newServices = services.replace(
-            "$SERVICE_NAME:",
+        if (services.contains("$serviceName:")) newServices = services.replace(
+            "$serviceName:",
             ""
-        ) else if (services.contains(":$SERVICE_NAME")) newServices = services.replace(
-            ":$SERVICE_NAME",
+        ) else if (services.contains(":$serviceName")) newServices = services.replace(
+            ":$serviceName",
             ""
-        ) else if (services.contains(SERVICE_NAME)) newServices = services.replace(SERVICE_NAME, "")
+        ) else if (services.contains(serviceName)) newServices = services.replace(serviceName, "")
         putSecureSetting(context, ENABLED_ACCESSIBILITY_SERVICES, newServices)
     }
 

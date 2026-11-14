@@ -72,6 +72,11 @@ class App : Application() {
 
         uncaughtExceptionHandler = Thread.getDefaultUncaughtExceptionHandler()!!
         Thread.setDefaultUncaughtExceptionHandler { thread, exception ->
+            // Keep the cause even when the startup crash-loop guard exits early.
+            runCatching {
+                java.io.File(filesDir, "last_crash.txt")
+                    .writeText(android.util.Log.getStackTraceString(exception))
+            }
             // If this is an intentional shutdown, do NOT schedule a restart
             if (intentionalShutdown) {
                 Process.killProcess(Process.myPid())

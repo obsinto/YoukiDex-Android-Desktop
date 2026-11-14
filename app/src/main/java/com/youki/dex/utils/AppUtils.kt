@@ -889,16 +889,10 @@ object AppUtils {
                 shizuku.runShellSync("am stack list") ?: ""
             }
 
-            // Parse lines like: taskId=42 bounds=[...] running=true visible=true baseIntent=com.pkg/.Activity
-            val taskIdRegex = Regex("""taskId=(\d+)""")
-            val pkgRegex = Regex("""baseIntent=([a-zA-Z0-9_.]+)/""")
-
             val seenPkgs = mutableSetOf<String>()
-            for (line in output.lines()) {
+            for ((taskId, pkg) in parseShellTasks(output)) {
                 if (result.size >= max) break
-                val taskId = taskIdRegex.find(line)?.groupValues?.get(1)?.toIntOrNull() ?: continue
-                val pkg = pkgRegex.find(line)?.groupValues?.get(1) ?: continue
-                if (pkg == selfPkg || pkg == launcherPkg || pkg.contains("systemui")) continue
+                if (pkg == selfPkg || pkg == "com.youki.dex" || pkg == launcherPkg || pkg.contains("systemui")) continue
                 if (seenPkgs.contains(pkg)) continue
                 seenPkgs.add(pkg)
 
@@ -922,6 +916,6 @@ object AppUtils {
             return null
         }
 
-        return if (result.isEmpty()) null else result
+        return result
     }
 }

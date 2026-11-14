@@ -160,7 +160,7 @@
             android:key="shizuku_active_app_detection"
             android:title="@string/shizuku_active_app_detection_title"
             android:summary="@string/shizuku_active_app_detection_summary"
-            android:defaultValue="false" />
+            android:defaultValue="true" />
            </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/quick_settings_panel">
