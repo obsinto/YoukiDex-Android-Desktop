@@ -10,7 +10,7 @@ Fork: [obsinto/YoukiDex-Android-Desktop](https://github.com/obsinto/YoukiDex-And
 - Base do código: `f80410273e5d27ac4ce5810e21efdaa30f69a9cb` (YoukiDEX 3.5).
 - Pacote personalizado: `com.youki.dex.tasks`; namespace das classes: `com.youki.dex`.
 - Nome instalado: **YoukiDEX (apps abertos)**.
-- Versão instalada: `3.5.3-tasks-local`, código `3503`.
+- Versão instalada: `3.5.4-tasks-local`, código `3504`.
 - Licença GPL-3.0 preservada em [LICENSE](LICENSE); [README original](docs/README-upstream.md) mantido como registro histórico do upstream.
 
 ## Objetivo e estado atual
@@ -27,7 +27,7 @@ Fork: [obsinto/YoukiDex-Android-Desktop](https://github.com/obsinto/YoukiDex-And
 | Vertical com Xiaomi e horizontal com YoukiDEX | Desejado, mas ainda não implementado; preferência é preservar o app aberto ao girar |
 | Dock Xiaomi sobreposta | Identificada como janela do `com.miui.home`; não foi desativada nem foi descoberta uma chave de configuração para ela |
 | Atalhos no desktop | Anki (`com.ichi2.anki`) e Duolingo (`com.duolingo`), usuário Android 0 |
-| Ícones cortados no desktop | Causa identificada; correção ainda pendente no código |
+| Ícones cortados no desktop | Layout corrigido e instalado na 3.5.4; ícones e nomes visíveis. Validação completa do arraste ainda pendente |
 
 “Tarefas abertas” significa as tarefas existentes reportadas pelo Android, inclusive janelas em segundo plano. Não é uma lista de todos os processos em memória, nem uma exigência de que cada app esteja visível.
 
@@ -50,10 +50,14 @@ Fork: [obsinto/YoukiDex-Android-Desktop](https://github.com/obsinto/YoukiDex-And
 8. Botão circular da barra abre `LauncherActivity` do YoukiDEX com `NEW_TASK | CLEAR_TOP`, mantendo Xiaomi como Home padrão.
 9. Última exceção não tratada salva em `files/last_crash.txt`, dentro do app, para diagnóstico. Um arquivo antigo não comprova uma falha nova.
 10. Seis testes unitários do parser e fixture do formato observado no HyperOS. Os nomes de dois apps de terceiros foram substituídos por exemplos na fixture pública, preservando o formato de entrada.
+11. Atalhos do desktop usam a largura e a altura do layout XML medido, incluindo o rótulo, em vez de uma caixa fixa de 50 × 50 dp.
+12. Posicionamento e colisão usam os retângulos completos das views; a posição procurada é limitada à área útil do desktop, descontando a barra. As posições continuam salvas nas chaves existentes `deskpos_*`.
+13. Ao começar um arraste, o app cancela o toque longo agendado para evitar que o menu abra durante o movimento.
+14. O rótulo do atalho respeita a preferência existente `single_line_labels` (uma ou duas linhas), sem criar configuração nova.
 
 ## Preferências atuais do app
 
-Snapshot histórico das preferências persistidas, lido do pacote personalizado. Não significa que todos esses valores foram alterados manualmente: alguns vieram da importação do original ou de inicialização do app. Chaves ausentes seguem os padrões do código desta versão.
+Snapshot histórico da base 3.5.3, lido do pacote personalizado antes da correção dos atalhos. A atualização 3.5.4 preserva esse perfil e não acrescenta chaves de configuração. Não significa que todos esses valores foram alterados manualmente: alguns vieram da importação do original ou de inicialização do app. Chaves ausentes seguem os padrões do código desta versão.
 
 Perfil importável: [config/pad-2026-11-14/profile.sdp](config/pad-2026-11-14/profile.sdp), no formato nativo de backup do YoukiDEX. A tabela abaixo é a representação legível do mesmo snapshot histórico, com 47 preferências.
 
@@ -176,13 +180,14 @@ Saída: `app/build/outputs/apk/debug/app-debug.apk`.
 
 O APK instalado foi compilado em modo debug e assinado com a chave debug local. Para atualizar o pacote existente sem perder os dados, é necessário preservar a mesma chave e usar um `versionCode` compatível. A chave fica fora do Git; uma chave debug recriada em outra máquina gera assinatura diferente.
 
-SHA-256 do APK preservado da versão 3.5.3:
+APKs preservados localmente em `artifacts/` (fora do GitHub):
 
-```text
-4577db10fa4ec22dc96369f4cda97e1f39d84f343d5c2b5fecf77f6c0656cf52
-```
+| Versão | SHA-256 |
+|---|---|
+| 3.5.4-tasks-local — instalada | `b18602eada77051947506079ad5cae377d97acfd4fcc33619698f1d08a4e5fc4` |
+| 3.5.3-tasks-local — base anterior | `4577db10fa4ec22dc96369f4cda97e1f39d84f343d5c2b5fecf77f6c0656cf52` |
 
-O hash identifica o APK já produzido, não promete compilação binária idêntica em outra máquina.
+Os hashes identificam os APKs já produzidos, sem prometer compilação binária idêntica em outra máquina.
 
 ## Instalação e restauração
 
@@ -211,7 +216,7 @@ A configuração atual não é uma instalação “100% automática” pronta: a
 
 A instalação original não foi removida. Para voltar a usá-la, desligar o serviço da cópia personalizada e reativar o original pela interface. Restaurar preferências próprias se necessário. Para restaurar estado de sistema/listeners, usar o backup específico desse aparelho e preservar serviços adicionados depois; não restaurar dumps completos de `settings` indiscriminadamente.
 
-## Validações já executadas no tablet
+## Validações da base 3.5.3
 
 - Parser: seis testes unitários aprovados, sem falhas nem erros; a suíte foi reexecutada antes da publicação deste registro.
 - Aplicativo Calculadora aberto apareceu na barra; sua tarefa fechada deixou de aparecer após a atualização periódica.
@@ -221,9 +226,21 @@ A instalação original não foi removida. Para voltar a usá-la, desligar o ser
 
 Esses resultados pertencem à validação da versão 3.5.3 nesta sessão. Não comprovam comportamento em outras versões de Android, após reinicialização ou após alterar o código.
 
+## Validação da correção dos atalhos — 3.5.4
+
+- Compilação final concluída com `:app:testDebugUnitTest :app:assembleDebug`; seis testes, zero falhas e zero erros.
+- APK final instalado com `adb install -r`, preservando os dados. Sobreposição e serviço de acessibilidade restabelecidos após a revogação feita pelo HyperOS na atualização.
+- Antes da correção, o UI dump mostrava atalhos de 113 × 113 px e imagens visíveis de 113 × 76 px, sem rótulos acessíveis. Após o ajuste de layout, os atalhos passaram a 216 × 240 px, com imagens inteiras de 126 × 126 px e nomes visíveis (AnkiDroid e Duolingo), na densidade observada de 360 dpi.
+- A abertura do AnkiDroid pelo atalho foi observada durante a validação. Na última inspeção da compilação final, os dois ícones e nomes permaneciam visíveis e o arquivo histórico de exceção não tinha uma nova data de modificação.
+- O teste de arraste revelou que o menu de toque longo podia abrir durante o movimento. O cancelamento desse toque foi implementado, compilado e instalado.
+- A validação completa de arraste, colisão, borda e persistência após recriar o desktop **não foi concluída**: houve interferência de telas/transições do sistema nas tentativas e o tablet foi desconectado antes da rodada final. Esses cenários continuam pendentes; não foram considerados aprovados.
+- O usuário informou que o comportamento observado por ele até a desconexão estava ótimo e solicitou publicar este estado.
+
+O layout XML continua sendo a fonte das dimensões; os retângulos usados no posicionamento são derivados das views, sem cache separado de tamanhos. O backup privado anterior à atualização está em `private/shortcuts-before-3.5.4/`; as evidências e os scripts de diagnóstico desta sessão ficam em `private/shortcuts-validation-3.5.4/`, sem publicação de capturas ou dados do tablet.
+
 ## Pendências antes de novas mudanças
 
-- Corrigir o corte dos ícones: `LauncherActivity` força cada atalho em 50 × 50 dp, enquanto `app_entry_large.xml` tem imagem de 56 dp, margens, padding e rótulo. As configurações nativas de escala não corrigem esse layout.
+- Concluir os testes de arraste, colisão, limites da tela e persistência após recriar o desktop quando o tablet estiver disponível novamente.
 - Decisão registrada em 14/11/2026: manter YoukiDEX. O SmartDock foi avaliado pelo código e pela atividade do repositório, mas não foi instalado; não há migração planejada nesta etapa.
 - Definir posteriormente a automação por orientação e a solução para a dock Xiaomi, conforme decisão do usuário.
 - Preservar o backup privado de assinatura/dados e do APK instalado fora do GitHub. No checkout local, esses arquivos ficam em `private/` e `artifacts/`, ignorados pelo Git; devem ter uma cópia adicional em armazenamento de backup. A chave de assinatura é necessária para futuras atualizações sem desinstalar o pacote.
@@ -235,4 +252,4 @@ Backups completos de preferências, dumps de sistema, dados do tablet, capturas 
 1. Fork com o código atual e registro completo da configuração.
 2. Somente depois, corrigir e validar os atalhos cortados do desktop.
 
-A versão registrada aqui continua sendo a 3.5.3, sem correção nova dos atalhos e sem macros de orientação.
+A configuração foi registrada primeiro; a correção dos atalhos foi implementada e instalada em seguida como 3.5.4. O estado atual está publicado para continuidade posterior, com a validação de arraste pendente e sem macros de orientação.

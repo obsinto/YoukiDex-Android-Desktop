@@ -9,6 +9,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
+import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -281,8 +282,6 @@ open class LauncherActivity : BaseFontScaleActivity(), SharedPreferences.OnShare
     //  once their count exceeded the grid's cell capacity.)
     // ─────────────────────────────────────────────────────────────────────────
 
-    private fun iconSizePx(): Int = Utils.dpToPx(this, 50)
-
     private fun getGridSize(): Int = Utils.dpToPx(this, 85)
 
     /** Snap a pixel value to the nearest grid cell. */
@@ -291,41 +290,51 @@ open class LauncherActivity : BaseFontScaleActivity(), SharedPreferences.OnShare
         return ((value + g / 2) / g) * g
     }
 
-    /** Check if two icon positions overlap (within icon bounds). */
-    private fun overlaps(x1: Int, y1: Int, x2: Int, y2: Int, iconSizePx: Int): Boolean {
-        val margin = (iconSizePx * 0.6f).toInt()
-        return abs(x1 - x2) < margin && abs(y1 - y2) < margin
-    }
-
-    /** Find a free grid cell starting from (startX, startY) that doesn't overlap existing icons. */
+    /** Place the complete measured item inside the desktop, clear of other items. */
     private fun findFreeCell(
         startX: Int, startY: Int,
-        occupiedPositions: List<Pair<Int, Int>>,
-        iconSizePx: Int,
+        width: Int, height: Int,
+        movingView: View? = null,
     ): Pair<Int, Int> {
         val g = getGridSize()
+        val maxX = (desktopContainer.width - desktopContainer.paddingLeft -
+            desktopContainer.paddingRight - width).coerceAtLeast(0)
+        val maxY = (desktopContainer.height - desktopContainer.paddingTop -
+            desktopContainer.paddingBottom - height).coerceAtLeast(0)
+        val originX = startX.coerceIn(0, maxX) / g * g
+        val originY = startY.coerceIn(0, maxY) / g * g
+        // Read actual view bounds; no separate size/position cache to go stale.
+        val occupiedBounds = (0 until desktopContainer.childCount).mapNotNull { i ->
+            val child = desktopContainer.getChildAt(i)
+            if (child == movingView) return@mapNotNull null
+            val lp = child.layoutParams as? FrameLayout.LayoutParams ?: return@mapNotNull null
+            val childWidth = if (lp.width >= 0) lp.width else child.measuredWidth
+            val childHeight = if (lp.height >= 0) lp.height else child.measuredHeight
+            Rect(lp.leftMargin, lp.topMargin, lp.leftMargin + childWidth, lp.topMargin + childHeight)
+        }
         // Search in expanding rings from the target cell.
         for (radius in 0..20) {
             val candidates = mutableListOf<Pair<Int, Int>>()
             if (radius == 0) {
-                candidates.add(Pair(startX, startY))
+                candidates.add(Pair(originX, originY))
             } else {
                 for (col in -radius..radius) {
-                    candidates.add(Pair(startX + col * g, startY - radius * g))
-                    candidates.add(Pair(startX + col * g, startY + radius * g))
+                    candidates.add(Pair(originX + col * g, originY - radius * g))
+                    candidates.add(Pair(originX + col * g, originY + radius * g))
                 }
                 for (row in -radius + 1 until radius) {
-                    candidates.add(Pair(startX - radius * g, startY + row * g))
-                    candidates.add(Pair(startX + radius * g, startY + row * g))
+                    candidates.add(Pair(originX - radius * g, originY + row * g))
+                    candidates.add(Pair(originX + radius * g, originY + row * g))
                 }
             }
             for ((cx, cy) in candidates) {
-                if (cx < 0 || cy < 0) continue
-                val free = occupiedPositions.none { (ox, oy) -> overlaps(cx, cy, ox, oy, iconSizePx) }
+                if (cx < 0 || cy < 0 || cx > maxX || cy > maxY) continue
+                val bounds = Rect(cx, cy, cx + width, cy + height)
+                val free = occupiedBounds.none { Rect.intersects(bounds, it) }
                 if (free) return Pair(cx, cy)
             }
         }
-        return Pair(startX, startY) // fallback
+        return Pair(originX, originY) // fallback
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -334,24 +343,25 @@ open class LauncherActivity : BaseFontScaleActivity(), SharedPreferences.OnShare
 
     fun loadDesktopApps() {
         desktopContainer.removeAllViews()
-        val iconSize = iconSizePx()
         val g = getGridSize()
-        val occupiedPositions = mutableListOf<Pair<Int, Int>>()
 
         // 1. App icons
         val apps = AppUtils.getPinnedApps(this, AppUtils.DESKTOP_LIST)
         apps.forEachIndexed { index, app ->
+            val view = createAppIcon(app)
             val savedPos = prefs.getString("deskpos_${app.packageName}", null)
             val pos = if (savedPos != null) {
                 val parts = savedPos.split(",")
                 val sx = snapToGrid(parts.getOrNull(0)?.toIntOrNull() ?: g)
                 val sy = snapToGrid(parts.getOrNull(1)?.toIntOrNull() ?: g)
-                findFreeCell(sx, sy, occupiedPositions, iconSize)
+                findFreeCell(sx, sy, view.measuredWidth, view.measuredHeight)
             } else {
-                findFreeCell(0, index * g, occupiedPositions, iconSize)
+                findFreeCell(0, index * g, view.measuredWidth, view.measuredHeight)
             }
-            occupiedPositions.add(pos)
-            addAppIcon(app, pos.first, pos.second)
+            val lp = view.layoutParams as FrameLayout.LayoutParams
+            lp.leftMargin = pos.first
+            lp.topMargin = pos.second
+            desktopContainer.addView(view, lp)
         }
 
         // 2. Widgets (temporarily disabled — see WIDGETS_ENABLED)
@@ -367,8 +377,7 @@ open class LauncherActivity : BaseFontScaleActivity(), SharedPreferences.OnShare
                     }
                     val (colSpan, rowSpan) = DesktopWidgetManager.getSavedSpan(this, hostId)
                     val (prefX, prefY) = DesktopWidgetManager.getSavedPosition(this, hostId) ?: (0 to 0)
-                    val pos = findFreeCell(prefX, prefY, occupiedPositions, iconSize)
-                    occupiedPositions.add(pos)
+                    val pos = findFreeCell(prefX, prefY, g * colSpan, g * rowSpan)
                     addWidgetView(hostId, pos.first, pos.second, colSpan, rowSpan)
                 }
             }
@@ -380,14 +389,23 @@ open class LauncherActivity : BaseFontScaleActivity(), SharedPreferences.OnShare
     // ─────────────────────────────────────────────────────────────────────────
 
     @SuppressLint("ClickableViewAccessibility")
-    private fun addAppIcon(app: App, startX: Int, startY: Int) {
-        val size = iconSizePx()
-        val view = LayoutInflater.from(this).inflate(R.layout.app_entry_large, null)
+    private fun createAppIcon(app: App): View {
+        // Keep the XML width and wrap-content height, including the label.
+        val view = LayoutInflater.from(this).inflate(R.layout.app_entry_large, desktopContainer, false)
         view.findViewById<ImageView>(R.id.app_icon_iv)?.setImageDrawable(app.icon)
-        view.findViewById<TextView>(R.id.app_name_tv)?.text = app.name
-
-        val lp = FrameLayout.LayoutParams(size, size).apply { leftMargin = startX; topMargin = startY }
-        view.layoutParams = lp
+        view.findViewById<TextView>(R.id.app_name_tv)?.apply {
+            text = app.name
+            maxLines = if (prefs.getBoolean("single_line_labels", true)) 1 else 2
+        }
+        val lp = view.layoutParams as FrameLayout.LayoutParams
+        view.measure(
+            ViewGroup.getChildMeasureSpec(
+                View.MeasureSpec.makeMeasureSpec(desktopContainer.width, View.MeasureSpec.EXACTLY),
+                desktopContainer.paddingLeft + desktopContainer.paddingRight,
+                lp.width,
+            ),
+            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+        )
 
         wireDrag(view) { freeX, freeY ->
             prefs.edit { putString("deskpos_${app.packageName}", "$freeX,$freeY") }
@@ -397,7 +415,7 @@ open class LauncherActivity : BaseFontScaleActivity(), SharedPreferences.OnShare
         }
         view.setOnLongClickListener { showAppContextMenu(app, view); true }
 
-        desktopContainer.addView(view)
+        return view
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -416,11 +434,7 @@ open class LauncherActivity : BaseFontScaleActivity(), SharedPreferences.OnShare
         val colSpan = (info.minWidth  / g.coerceAtLeast(1)).coerceAtLeast(1)
         val rowSpan = (info.minHeight / g.coerceAtLeast(1)).coerceAtLeast(1)
 
-        val occupied = (0 until desktopContainer.childCount).mapNotNull { i ->
-            val lp = desktopContainer.getChildAt(i).layoutParams as? FrameLayout.LayoutParams
-            lp?.let { it.leftMargin to it.topMargin }
-        }
-        val pos = findFreeCell(0, 0, occupied, iconSizePx())
+        val pos = findFreeCell(0, 0, g * colSpan, g * rowSpan)
 
         DesktopWidgetManager.saveWidgetPosition(this, hostId, pos.first, pos.second, colSpan, rowSpan)
         addWidgetView(hostId, pos.first, pos.second, colSpan, rowSpan)
@@ -485,7 +499,13 @@ open class LauncherActivity : BaseFontScaleActivity(), SharedPreferences.OnShare
                 MotionEvent.ACTION_MOVE -> {
                     val dx = event.rawX - downRawX
                     val dy = event.rawY - downRawY
-                    if (!hasMoved && (abs(dx) > 12 || abs(dy) > 12)) hasMoved = true
+                    if (!hasMoved && (abs(dx) > 12 || abs(dy) > 12)) {
+                        hasMoved = true
+                        // The DOWN event scheduled a long press in View.onTouchEvent.
+                        // Once dragging takes over, that menu must not open mid-drag.
+                        v.cancelLongPress()
+                        v.isPressed = false
+                    }
                     if (hasMoved) {
                         val lp = v.layoutParams as FrameLayout.LayoutParams
                         lp.leftMargin = (startLeft + dx).toInt().coerceAtLeast(0)
@@ -500,13 +520,7 @@ open class LauncherActivity : BaseFontScaleActivity(), SharedPreferences.OnShare
                         val snappedX = snapToGrid(lp.leftMargin).coerceAtLeast(0)
                         val snappedY = snapToGrid(lp.topMargin).coerceAtLeast(0)
 
-                        // Check overlap against every other desktop item.
-                        val otherPositions = (0 until desktopContainer.childCount).mapNotNull { i ->
-                            val child = desktopContainer.getChildAt(i)
-                            if (child == v) null
-                            else (child.layoutParams as? FrameLayout.LayoutParams)?.let { it.leftMargin to it.topMargin }
-                        }
-                        val freePos = findFreeCell(snappedX, snappedY, otherPositions, iconSizePx())
+                        val freePos = findFreeCell(snappedX, snappedY, v.width, v.height, movingView = v)
 
                         lp.leftMargin = freePos.first
                         lp.topMargin  = freePos.second

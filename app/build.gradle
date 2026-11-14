@@ -13,8 +13,8 @@ android {
         applicationId "com.youki.dex.tasks"
         minSdk 26
         targetSdk 35
-        versionCode 3503
-        versionName "3.5.3-tasks-local"
+        versionCode 3504
+        versionName "3.5.4-tasks-local"
         resValue 'string', 'app_name_tasks', 'YoukiDEX (apps abertos)'
         multiDexEnabled true
         ndk {
