@@ -1,0 +1,58 @@
+{
+  "captured_on": "2026-11-14",
+  "purpose": "historical_snapshot_not_a_settings_script",
+  "settings": {
+    "global": {
+      "enable_freeform_support": {
+        "before": "1",
+        "observed": "1"
+      },
+      "force_resizable_activities": {
+        "before": "1",
+        "observed": "1"
+      },
+      "development_force_resizable_activities": {
+        "before": null,
+        "observed": "1"
+      },
+      "enable_non_resizable_multi_window": {
+        "before": "0",
+        "observed": "0"
+      },
+      "force_desktop_mode_on_external_displays": {
+        "before": "0",
+        "observed": "0"
+      },
+      "force_fsg_nav_bar": {
+        "before": "1",
+        "observed": "1"
+      },
+      "hide_gesture_line": {
+        "before": "0",
+        "observed": "0"
+      }
+    },
+    "secure": {
+      "navigation_mode": {
+        "before": "2",
+        "observed": "2"
+      },
+      "secure_overlay_settings": {
+        "before": "0",
+        "observed": "1"
+      },
+      "accessibility_enabled": {
+        "before": "1",
+        "observed": "1"
+      },
+      "enabled_accessibility_services": {
+        "before": "com.youki.dex/com.youki.dex.services.DockService",
+        "observed": "com.youki.dex.tasks/com.youki.dex.services.DockService"
+      },
+      "enabled_notification_listeners": {
+        "before": "com.xiaomi.barrage/com.xiaomi.barrage.service.NotificationMonitorService",
+        "observed": "com.youki.dex.tasks/com.youki.dex.services.NotificationService"
+      }
+    }
+  }
+}

@@ -14,3 +14,9 @@ app/rust/youki-engine/target/
 # Security & Keystore Secrets
 password.md
 *.jks
+
+# Local device backups and build artifacts
+/private/
+/artifacts/
+*.apk
+*.aab

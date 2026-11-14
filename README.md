@@ -1,254 +1,238 @@
-> ⚠️ **Development on this project has been discontinued.** This repo is archived — no further updates, but everything below still describes it accurately.
+# YoukiDEX — configuração do Pad
 
-<p align="center">
-  <img src="https://raw.githubusercontent.com/mrYouki/YoukiDex-Android-Desktop/main/app/src/main/ic_launcher-playstore.png" width="100" alt="YoukiDEX Logo"/>
-</p>
+Registro da instalação personalizada em 14/11/2026. Este fork preserva o código da versão instalada e as preferências verificadas no tablet. A decisão é continuar com o YoukiDEX e corrigir os problemas conforme aparecerem.
 
-<h1 align="center">YoukiDEX</h1>
+Fork: [obsinto/YoukiDex-Android-Desktop](https://github.com/obsinto/YoukiDex-Android-Desktop).
 
-<p align="center">
-  A full desktop experience for Android
-</p>
+## Origem e versão
 
-<p align="center">
-  <a href="https://github.com/mrYouki/YoukiDex-Android-Desktop/releases">
-    <img src="https://img.shields.io/github/v/release/mrYouki/YoukiDex-Android-Desktop?style=for-the-badge" alt="Latest release"/>
-  </a>
-  <a href="https://github.com/mrYouki/YoukiDex-Android-Desktop/blob/main/LICENSE">
-    <img src="https://img.shields.io/github/license/mrYouki/YoukiDex-Android-Desktop?style=for-the-badge" alt="License"/>
-  </a>
-  <a href="https://github.com/mrYouki/YoukiDex-Android-Desktop/releases/latest">
-    <img src="https://img.shields.io/badge/Download-APK-brightgreen?style=for-the-badge&logo=android" alt="Download APK"/>
-  </a>
-  <img src="https://img.shields.io/badge/Android-8.0%2B-green?style=for-the-badge&logo=android" alt="Android"/>
-</p>
+- Projeto original: [mrYouki/YoukiDex-Android-Desktop](https://github.com/mrYouki/YoukiDex-Android-Desktop), arquivado pelo autor em 15/09/2026.
+- Base do código: `f80410273e5d27ac4ce5810e21efdaa30f69a9cb` (YoukiDEX 3.5).
+- Pacote personalizado: `com.youki.dex.tasks`; namespace das classes: `com.youki.dex`.
+- Nome instalado: **YoukiDEX (apps abertos)**.
+- Versão instalada: `3.5.3-tasks-local`, código `3503`.
+- Licença GPL-3.0 preservada em [LICENSE](LICENSE); [README original](docs/README-upstream.md) mantido como registro histórico do upstream.
 
----
+## Objetivo e estado atual
 
-## What is this?
-
-YoukiDEX turns your phone into something closer to a desktop — a taskbar, an app dock, windows you can resize and move around, hot corners, the whole thing. It runs as an Accessibility Service overlay, so it doesn't have to become your default launcher (though most people end up setting it as one anyway, just so it loads automatically instead of having to open it every time).
-
-A few features — custom display size, freezing background apps, that kind of thing — need Root or Shizuku. Everything else works out of the box.
-
----
-
-## About the project
-
-Just one person building this in their free time — no team, no company. Everything, including the native engine, gets written and built directly on a phone (a mid-range one — Unisoc T606, 8GB RAM) using Android code studio (acs). No laptop involved at any point. It also gets tested on a itel S23, mostly to make sure nothing that only shows up on a budget-tier phone slips through.
-
-That setup naturally shapes how things move: updates go out when something's actually ready, not on a schedule, and how fast bugs get fixed depends on how much free time there is that week.
-
----
-
-<p align="center">
-  <a href="https://discord.gg/mKkaMxd5M2">
-    <img src="https://img.shields.io/badge/Discord-Join%20the%20community-5865F2?style=for-the-badge&logo=discord&logoColor=white" alt="Join our Discord"/>
-  </a>
-</p>
-
-<p align="center">
-  <i>btw. Beta updates, beta source code, drama, and 3 AM debates about app icons all move faster on the Discord server — GitHub Issues is where bugs go to nap.</i>
-</p>
-
----
-
-For release notes and version history, check the [GitHub Releases page](https://github.com/mrYouki/YoukiDex-Android-Desktop/releases) — every release has its own detailed changelog.
-
----
-
-## Features
-
-**Desktop**
-- Accessibility-based overlay — works as your launcher or on-demand from a Quick Settings tile / shortcut
-- Centered floating dock (KDE-style) or classic edge-pinned dock (Windows-style)
-- 3 ready-made dock presets (Minimal / Default / Gesture) that set up everything — nav buttons, quick settings, running-app limits — in one tap, instead of tuning 15 different settings by hand
-- Resizable floating windows for any app, plus real window tiling (maximize, snap left/right/top/bottom)
-- Multiple app windows group under one dock icon, the way Windows or macOS does it
-- Hot corners (top-right / bottom-right, each mappable to its own action)
-- Multi-display support
-- Mouse right-click and hardware keyboard shortcuts work the same as long-press/touch
-- An inline calculator in the app search — type "12+7", get a tappable "19"
-
-**Power menu**
-- Settings, lock, power off, restart
-- Restart or fully close just YoukiDEX itself, without touching the rest of the phone
-- Switch to another user directly from the same menu
-
-**Apps**
-- Full app drawer with search and sorting, plus the option to hide apps
-- Deep shortcuts (long-press for quick actions)
-- Icon pack support
-- Per-app launch mode (windowed or fullscreen), remembered per app
-- Optional forced landscape
-
-**Taskbar & tray**
-- Running apps, tap to minimize/restore
-- Live CPU and RAM usage
-- Battery, Wi-Fi, Bluetooth, volume, date
-- Notifications, with per-app silencing
-- A Quick Settings-style panel with brightness/volume sliders
-
-**Live wallpaper**
-- Animated video wallpaper with its own gallery and a built-in editor — crop, pinch/rotate/pan directly with your fingers, brightness/contrast/saturation, background color
-- Portrait and landscape get fully separate settings (scale, position, rotation, even audio speed/pitch), so adjusting one never messes up the other
-- Rendered natively — OpenGL ES or Vulkan, your choice, picked once during setup
-- Desktop grid for icons and widgets, with Nova-style drag-and-drop that pushes things out of the way
-
-**Workshop**
-- A built-in browser for finding wallpapers and fonts, with its own ad blocker (strips ads/popups live as the page loads) and automatic font capture — browse Google Fonts and it grabs and installs whatever font file the page loads, no separate download step
-- Comes with a few sources out of the box (MotionBGs, DesktopHut, MoeWalls for wallpapers; Google Fonts, DaFont, Fontesk for fonts) — add your own by URL
-
-**Plugins**
-- Installs plugin ZIPs (its own format, or actual Magisk modules) the same way a Magisk-style manager would — install, uninstall, and a running-service toggle per plugin
-
-**Performance tweaks**
-- A separate, clearly-labeled tab for the riskier stuff — GPU/thermal/FPS tweaks with names like "Thermal Killer" and "HardCoreGT," each doing exactly what it says on the tin. Not something you need to touch; it's there if you want to push a specific device further and know what you're doing
-
-**Multi-user**
-- Add and switch between device users right from the app, either from a quick popup in the dock or a full management screen
-
-**Cast**
-- Send the desktop or media playback to a Cast device
-
-**Sound & look**
-- Custom sounds for lock/unlock, charging, notifications, etc.
-- Material You colors or fully custom dock bubble color, with adjustable opacity, plus a fully transparent dock option
-- Custom fonts — pick one file for Arabic and another for Latin text, and the app switches between them automatically as you type or scroll, no separate language setting needed
-- Text size scaling, per-app or app-wide, plus a custom number badge you can put on any icon
-
-**With Root or Shizuku**
-- Custom display size/resolution, disabling heads-up notifications, freezing background apps, uninstalling system apps, soft reboot
-- **Auto-grant** — the moment either is detected, the app grants itself everything it needs in one shot (over 20 permissions and system settings) instead of asking permission by permission. Accessibility stays a manual step on purpose, so it's always something you turn on yourself
-- A built-in shell terminal
-
-**Self-test tool**
-- A QA feature (mostly for me) that opens every screen in the app on an isolated virtual display to catch crashes before a release goes out
-
----
-
-## Under the hood
-
-Mostly Kotlin, with a Rust engine underneath handling the live wallpaper rendering, some math-heavy stuff, and text parsing — anything that's pure computation and doesn't need to talk to Android directly. Roughly 80/20 Kotlin to Rust. Everything that touches Android's actual APIs — the services, the UI, the database — stays in Kotlin, since that's what it's built for.
-
-Runs on Android 8.0 and up, built with Gradle and Cargo, all of it compiled on-device through Termux.
-
----
-
-## Screenshots
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/mrYouki/YoukiDex-Android-Desktop/main/fastlane/metadata/android/en-US/images/phoneScreenshots/1.jpg" width="100%" />
-  <br/>
-  <img src="https://raw.githubusercontent.com/mrYouki/YoukiDex-Android-Desktop/main/fastlane/metadata/android/en-US/images/phoneScreenshots/2.jpg" width="100%" />
-  <br/>
-  <img src="https://raw.githubusercontent.com/mrYouki/YoukiDex-Android-Desktop/main/fastlane/metadata/android/en-US/images/phoneScreenshots/3.jpg" width="100%" />
-</p>
-
----
-
-## Quick Start
-
-1. Install the APK and open YoukiDEX
-2. Grant the permissions it asks for — Accessibility is the one that actually matters, nothing draws without it
-3. Then either add the Quick Settings tile and tap it, set YoukiDEX as your launcher, or use the home-screen shortcut it offers on first launch
-
----
-
-## Optional: Root or Shizuku
-
-A few features need `WRITE_SECURE_SETTINGS`-level access. Three ways to get there:
-
-- **Shizuku** (easiest long-term) — install it, start it once, then grant YoukiDEX permission when it asks.
-- **Root** — Magisk or KernelSU, detected automatically, nothing to set up.
-- **ADB**, if you'd rather do it manually and don't have either:
-  ```bash
-  adb shell pm grant com.youki.dex android.permission.WRITE_SECURE_SETTINGS
-  adb shell appops set com.youki.dex GET_USAGE_STATS allow
-  ```
-
-Without any of these, the app still works — you just won't have the handful of features that need system-level access.
-
----
-
-## Permissions
-
-| Permission | What it's for |
+| Item | Estado em 14/11/2026 |
 |---|---|
-| `SYSTEM_ALERT_WINDOW` | Draw the dock and floating windows over other apps |
-| Accessibility Service | The core of how the overlay works |
-| `PACKAGE_USAGE_STATS` | Show recent and running apps |
-| `WRITE_SECURE_SETTINGS` / `WRITE_SETTINGS` | System-level settings (Root/Shizuku/ADB only) |
-| `QUERY_ALL_PACKAGES` | List installed apps |
-| Notification Listener | Show and manage notifications from the dock |
-| `MANAGE_USERS` | Multi-user switching |
-| `MANAGE_EXTERNAL_STORAGE` / media permissions | Wallpapers, Workshop downloads, backup/restore |
-| `BLUETOOTH*` | Bluetooth indicator in the tray |
-| `CAPTURE_VIDEO_OUTPUT` | Self-test tool's virtual display (Root/Shizuku only) |
+| Barra mostrar somente apps com tarefas abertas | Implementado e testado com Shizuku; limite de 10 apps por orientação |
+| Apps fixados na barra do YoukiDEX | Nenhum; `pinned.lst` e `dock_pinned.lst` ausentes no armazenamento privado |
+| Botão circular da barra | Abre o próprio desktop do YoukiDEX |
+| Tela inicial padrão do Android | Xiaomi: `com.miui.home/.launcher.Launcher` |
+| YoukiDEX original, pacote `com.youki.dex` | Preservado com os dados; serviço de acessibilidade desligado e app parado durante os testes |
+| Shizuku | Instalado, iniciado e autorizado para a cópia personalizada |
+| MacroDroid | Instalado, mas nenhuma macro criada ou ativada nesta configuração |
+| Vertical com Xiaomi e horizontal com YoukiDEX | Desejado, mas ainda não implementado; preferência é preservar o app aberto ao girar |
+| Dock Xiaomi sobreposta | Identificada como janela do `com.miui.home`; não foi desativada nem foi descoberta uma chave de configuração para ela |
+| Atalhos no desktop | Anki (`com.ichi2.anki`) e Duolingo (`com.duolingo`), usuário Android 0 |
+| Ícones cortados no desktop | Causa identificada; correção ainda pendente no código |
 
----
+“Tarefas abertas” significa as tarefas existentes reportadas pelo Android, inclusive janelas em segundo plano. Não é uma lista de todos os processos em memória, nem uma exigência de que cada app esteja visível.
 
-## Known issues
+## Ambiente verificado
 
-**RedMagic & ZTE phones don't do floating windows out of the box.** These brands turn Freeform Windows off by default. Fix:
-1. Enable Developer Options (tap Build Number 7 times)
-2. Turn on **Force activities to be resizable** and **Enable freeform windows**
-3. Go to **Settings → Display → Desktop Mode** and enable it
-4. Reboot
+- Tablet Xiaomi, modelo `25040RP0AL`, codinome `taiko`.
+- Android 16, HyperOS `OS3.0.305.0.WOVMIXM`.
+- Tela capturada em paisagem: 2560 × 1600; densidade física 360 dpi.
+- Shizuku oficial: pacote `moe.shizuku.privileged.api`, versão `13.6.0.r1086.2650830c`, projeto [RikkaApps/Shizuku](https://github.com/RikkaApps/Shizuku).
 
-Not a YoukiDEX bug — that's just how those phones ship.
+## Alterações no código já instalado
 
-**Forced landscape doesn't work on some apps.** If an app hardcodes portrait mode, there's no way to override that without root or system-level access — that's an Android limitation, not something fixable from a regular app.
+1. Pacote separado, nome de aplicativo próprio e destino dos atalhos ajustado para permitir coexistência com o original e preservar os dados antigos.
+2. Serviço de acessibilidade identificado por `ComponentName(context, DockService::class.java)`, sem depender do ID do pacote original.
+3. Parser de `am stack list` compatível com o formato do HyperOS (`taskId=123: pacote/.Activity`) e com o formato `baseIntent=...`.
+4. Barra baseada nas tarefas retornadas pelo Shizuku; removida a alternativa que preenchia a barra com histórico de uso quando a consulta não retornava tarefas. Sem acesso disponível, a lista fica vazia.
+5. Exclusão do próprio pacote, da cópia original, do launcher padrão e do System UI; um ícone por pacote e indicadores derivados da mesma lista de tarefas.
+6. Atualização a cada dois segundos quando a dock está visível e a tela ligada, para detectar fechamento de tarefas sem evento de acessibilidade.
+7. Proteção para não atualizar a lista antes de inicializar a interface do serviço. O erro de inicialização foi diagnosticado e corrigido.
+8. Botão circular da barra abre `LauncherActivity` do YoukiDEX com `NEW_TASK | CLEAR_TOP`, mantendo Xiaomi como Home padrão.
+9. Última exceção não tratada salva em `files/last_crash.txt`, dentro do app, para diagnóstico. Um arquivo antigo não comprova uma falha nova.
+10. Seis testes unitários do parser e fixture do formato observado no HyperOS. Os nomes de dois apps de terceiros foram substituídos por exemplos na fixture pública, preservando o formato de entrada.
 
-**Desktop widgets are temporarily disabled.** The code's there, but it's switched off while a few crash edge cases get sorted out first.
+## Preferências atuais do app
 
-**The built-in file manager is disabled.** It exists in the code but it's broken and unreliable right now, so it's turned off until it's rebuilt properly. Use any regular file manager app in the meantime.
+Snapshot histórico das preferências persistidas, lido do pacote personalizado. Não significa que todos esses valores foram alterados manualmente: alguns vieram da importação do original ou de inicialização do app. Chaves ausentes seguem os padrões do código desta versão.
 
----
+Perfil importável: [config/pad-2026-11-14/profile.sdp](config/pad-2026-11-14/profile.sdp), no formato nativo de backup do YoukiDEX. A tabela abaixo é a representação legível do mesmo snapshot histórico, com 47 preferências.
 
-## FAQ
+O nome pessoal exibido no menu foi omitido dos arquivos públicos e preservado no backup privado; deve ser configurado localmente ao reproduzir em outro aparelho. O horário interno da última inicialização também foi omitido por ser um dado transitório.
 
-**Do I have to set it as my default launcher?**
-No, it works either way — but if you don't, you'll need to open it by hand each time instead of it loading on boot. Most people just set it as default.
+| Chave | Tipo no XML | Valor observado |
+|---|---|---|
+| `activation_method` | `string` | `handle` |
+| `allow_app_freeze` | `boolean` | `false` |
+| `allow_sysapp_uninstall` | `boolean` | `false` |
+| `always_floating` | `boolean` | `false` |
+| `center_apps_btn` | `boolean` | `false` |
+| `center_running_apps` | `boolean` | `true` |
+| `custom_toasts` | `boolean` | `false` |
+| `deskpos_com.ichi2.anki` | `string` | `0,0` |
+| `disable_heads_up` | `boolean` | `false` |
+| `disable_taskbar` | `boolean` | `false` |
+| `dock_hover_show_hide` | `boolean` | `true` |
+| `editor_preview_aspect` | `string` | `16_9` |
+| `editor_preview_scale` | `string` | `65` |
+| `enable_nav_apps` | `boolean` | `true` |
+| `enable_nav_assist` | `boolean` | `false` |
+| `enable_power_menu` | `boolean` | `false` |
+| `enable_qs_battery` | `boolean` | `false` |
+| `enable_qs_bluetooth` | `boolean` | `false` |
+| `enable_qs_bottom_row` | `boolean` | `true` |
+| `enable_qs_date` | `boolean` | `true` |
+| `enable_qs_notif` | `boolean` | `false` |
+| `enable_qs_pin` | `boolean` | `true` |
+| `enable_qs_vol` | `boolean` | `true` |
+| `enable_qs_wallpaper` | `boolean` | `false` |
+| `enable_qs_wifi` | `boolean` | `true` |
+| `enable_soft_reboot` | `boolean` | `false` |
+| `enable_tiling` | `boolean` | `true` |
+| `handle_position` | `string` | `start` |
+| `hide_nav_buttons` | `boolean` | `false` |
+| `hide_status_bar` | `boolean` | `false` |
+| `icon_padding` | `string` | `5` |
+| `max_running_apps` | `string` | `10` |
+| `max_running_apps_landscape` | `string` | `10` |
+| `onboarding_complete` | `boolean` | `true` |
+| `prefer_last_display` | `boolean` | `false` |
+| `qs_panel_tile_1` | `string` | `wifi` |
+| `qs_panel_tile_2` | `string` | `bluetooth` |
+| `qs_panel_tile_3` | `string` | `none` |
+| `qs_panel_tile_4` | `string` | `none` |
+| `scale_factor` | `string` | `1.0` |
+| `shizuku_active_app_detection` | `boolean` | `true` |
+| `shortcut_pinned` | `boolean` | `true` |
+| `show_battery_level` | `boolean` | `false` |
+| `show_resource_monitor` | `boolean` | `false` |
+| `show_running_indicators` | `boolean` | `true` |
+| `show_search_bar` | `boolean` | `true` |
+| `uhid_mode_enabled` | `boolean` | `false` |
 
-**The dock disappeared after a reboot.**
-Check that Accessibility is still turned on, and that your phone's battery settings aren't killing it in the background — common on MIUI, ColorOS, and similar.
+Os ajustes nativos de tamanho dos ícones e dos rótulos não estavam personalizados (padrões de 100%). Nesta versão eles são aplicados ao dock e à grade de aplicativos, mas não ao desenho dos atalhos do desktop.
 
-**Is this fully open source?**
-Yes. Everything is built and pushed straight from a phone through Termux — no computer involved anywhere in the process. Contributions and bug reports are always welcome.
+### Arquivos de atalhos
 
-**Accessibility won't turn on for me on Android 13+.**
-That's Android blocking it because the app wasn't installed from the Play Store. One-time fix:
-```bash
-adb shell appops set com.youki.dex REQUEST_INSTALL_PACKAGES allow
+Cópia versionada: [config/pad-2026-11-14/desktop.lst](config/pad-2026-11-14/desktop.lst). `files/desktop.lst` contém:
+
+```text
+com.ichi2.anki 0
+com.duolingo 0
 ```
-Then go back to Settings → Accessibility and it should work. Installing via `adb install` instead of a regular APK also skips this entirely.
 
----
+Só o Anki tinha posição explicitamente salva: `deskpos_com.ichi2.anki=0,0`. O Duolingo usa a posição calculada pelo app. Esses arquivos não são incluídos pela exportação nativa de preferências `.sdp`.
 
-## Not planned
+Para adicionar um atalho pela interface: abrir o menu de aplicativos (nove pontos), manter pressionado o app e escolher **Desktop / Área de trabalho**. Fixar no desktop é diferente de fixar na barra.
 
-| Feature | Why not |
+## Acessos e configurações de sistema
+
+A cópia personalizada está com:
+
+- Acessibilidade: `com.youki.dex.tasks/com.youki.dex.services.DockService`.
+- Acesso a notificações: `com.youki.dex.tasks/com.youki.dex.services.NotificationService`.
+- Shizuku: `moe.shizuku.manager.permission.API_V23` concedida.
+- `android.permission.WRITE_SECURE_SETTINGS` e `android.permission.PACKAGE_USAGE_STATS` concedidas no pacote. A barra personalizada usa a consulta de tarefas via Shizuku.
+- AppOps `SYSTEM_ALERT_WINDOW`, `WRITE_SETTINGS` e `MANAGE_EXTERNAL_STORAGE` em `allow`.
+- Permissões de notificação, imagens, vídeos e conexão/varredura Bluetooth concedidas no pacote, conforme o provisionamento do próprio app.
+
+Os valores abaixo também estão em [system-settings.json](config/pad-2026-11-14/system-settings.json), como snapshot histórico. O JSON não é um script para aplicar settings.
+
+Comparação com o snapshot capturado antes desta etapa:
+
+| Namespace/chave | Antes | Atual |
+|---|---|---|
+| `global/development_force_resizable_activities` | ausente | `1` |
+| `secure/secure_overlay_settings` | `0` | `1` |
+| `secure/enabled_accessibility_services` | `com.youki.dex/com.youki.dex.services.DockService` | `com.youki.dex.tasks/com.youki.dex.services.DockService` |
+| `secure/enabled_notification_listeners` | `com.xiaomi.barrage/com.xiaomi.barrage.service.NotificationMonitorService` | `com.youki.dex.tasks/com.youki.dex.services.NotificationService` |
+
+A troca do listener de notificações é um efeito do provisionamento do próprio app, que escreve essa lista diretamente. Ao implementar um instalador/rollback, preservar os demais listeners e serviços existentes no dispositivo; não copiar uma lista exclusiva do tablet para outro aparelho.
+
+Valores relevantes que já estavam presentes e permaneceram iguais no snapshot final:
+
+| Namespace/chave | Valor |
 |---|---|
-| Background blur on windows | Android doesn't allow real-time blur on overlays without system privileges |
-| Play Store release | The permissions this needs aren't allowed there |
-| iOS support | Different OS, not something this codebase can do |
-| Cloud sync for settings | Local backup/restore already covers it |
+| `global/enable_freeform_support` | `1` |
+| `global/force_resizable_activities` | `1` |
+| `global/enable_non_resizable_multi_window` | `0` |
+| `global/force_desktop_mode_on_external_displays` | `0` |
+| `global/force_fsg_nav_bar` | `1` |
+| `secure/navigation_mode` | `2` |
+| `global/hide_gesture_line` | `0` |
 
----
+A navegação foi temporariamente trocada durante um teste e depois restaurada para gestos. Não há mudança permanente desses três últimos valores nesta configuração. A linha de gestos do Android e a Floating Dock Xiaomi são elementos diferentes.
 
-## Disclaimer
+## Compilar a versão preservada
 
-Independent, one-person project. Not affiliated with or endorsed by anyone.
+Ambiente usado: JDK 21 (compilação Kotlin/Java alvo 17), Android SDK Platform 35, Build Tools 36.1.0, Gradle Wrapper 8.11.1, AGP 8.10.1 e Kotlin 2.2.20. O upstream já traz os artefatos nativos distribuídos nessa base; não foi executada uma recompilação Rust nesta etapa.
 
----
+Configure `sdk.dir` no `local.properties` local e execute a partir da raiz:
 
-## Credits
+```bash
+bash ./gradlew --no-daemon --console=plain --max-workers=4 :app:testDebugUnitTest :app:assembleDebug
+```
 
-Started from **Smart Dock**, but it's been rebuilt from the ground up since then — new package, new architecture, a native engine that didn't exist before. Not much of the original is left besides the initial idea.
+Saída: `app/build/outputs/apk/debug/app-debug.apk`.
 
-Thanks to the open-source Android community for the tools and libraries this leans on.
+O APK instalado foi compilado em modo debug e assinado com a chave debug local. Para atualizar o pacote existente sem perder os dados, é necessário preservar a mesma chave e usar um `versionCode` compatível. A chave fica fora do Git; uma chave debug recriada em outra máquina gera assinatura diferente.
 
----
+SHA-256 do APK preservado da versão 3.5.3:
 
-<p align="center">Made by <a href="https://github.com/mrYouki">mrYouki</a></p>
+```text
+4577db10fa4ec22dc96369f4cda97e1f39d84f343d5c2b5fecf77f6c0656cf52
+```
+
+O hash identifica o APK já produzido, não promete compilação binária idêntica em outra máquina.
+
+## Instalação e restauração
+
+1. Preservar o APK original, os dados e as listas atuais de serviços antes de mudar qualquer instalação.
+2. Instalar a cópia assinada com `adb install -r caminho/do/app-debug.apk`.
+3. Instalar/iniciar o Shizuku oficial e autorizar **YoukiDEX (apps abertos)**. O estado de execução do Shizuku precisa ser conferido novamente após reiniciar o tablet.
+4. Conceder sobreposição e acessibilidade à cópia personalizada. No HyperOS observado, atualizar o APK revogou a sobreposição; foi necessário concedê-la novamente e religar o serviço de acessibilidade, preservando os demais serviços.
+5. Copiar o [perfil versionado](config/pad-2026-11-14/profile.sdp) para o tablet com `adb push config/pad-2026-11-14/profile.sdp /sdcard/Download/YoukiDEX-pad.sdp`. No YoukiDEX personalizado, abrir as configurações avançadas e usar a opção de restaurar preferências para selecionar esse arquivo. Ajustar o nome exibido localmente.
+6. Restaurar separadamente a lista de atalhos do desktop a partir do arquivo versionado ou recriar os atalhos pela interface. A exportação `.sdp` não inclui `desktop.lst`; além disso, o exportador nativo ignora conjuntos e valores contendo `://`. O backup privado dos XMLs cobre esses casos.
+7. Abrir o desktop sem trocar o launcher padrão:
+
+```bash
+adb shell am start -W -n com.youki.dex.tasks/com.youki.dex.activities.LauncherActivity
+```
+
+Comandos básicos usados, com ID do pacote personalizado:
+
+```bash
+adb shell pm grant com.youki.dex.tasks android.permission.WRITE_SECURE_SETTINGS
+adb shell appops set com.youki.dex.tasks SYSTEM_ALERT_WINDOW allow
+```
+
+A configuração atual não é uma instalação “100% automática” pronta: ainda falta um instalador idempotente com backup/rollback, preservação das listas de serviços, restauração de preferências/atalhos e verificações pós-instalação. Autorizações do Android e início do Shizuku também dependem do estado do dispositivo. O README registra o necessário para construir essa automação sem presumir que ela já existe.
+
+### Retorno ao original
+
+A instalação original não foi removida. Para voltar a usá-la, desligar o serviço da cópia personalizada e reativar o original pela interface. Restaurar preferências próprias se necessário. Para restaurar estado de sistema/listeners, usar o backup específico desse aparelho e preservar serviços adicionados depois; não restaurar dumps completos de `settings` indiscriminadamente.
+
+## Validações já executadas no tablet
+
+- Parser: seis testes unitários aprovados, sem falhas nem erros; a suíte foi reexecutada antes da publicação deste registro.
+- Aplicativo Calculadora aberto apareceu na barra; sua tarefa fechada deixou de aparecer após a atualização periódica.
+- Histórico de aplicativos deixou de preencher a lista como se fossem tarefas abertas.
+- Botão circular acionado a partir das Configurações voltou à `LauncherActivity` da cópia personalizada; Xiaomi permaneceu como Home padrão.
+- Serviço permaneceu estável após a correção da inicialização; o arquivo histórico de exceção não recebeu nova data nesses testes.
+
+Esses resultados pertencem à validação da versão 3.5.3 nesta sessão. Não comprovam comportamento em outras versões de Android, após reinicialização ou após alterar o código.
+
+## Pendências antes de novas mudanças
+
+- Corrigir o corte dos ícones: `LauncherActivity` força cada atalho em 50 × 50 dp, enquanto `app_entry_large.xml` tem imagem de 56 dp, margens, padding e rótulo. As configurações nativas de escala não corrigem esse layout.
+- Decisão registrada em 14/11/2026: manter YoukiDEX. O SmartDock foi avaliado pelo código e pela atividade do repositório, mas não foi instalado; não há migração planejada nesta etapa.
+- Definir posteriormente a automação por orientação e a solução para a dock Xiaomi, conforme decisão do usuário.
+- Preservar o backup privado de assinatura/dados e do APK instalado fora do GitHub. No checkout local, esses arquivos ficam em `private/` e `artifacts/`, ignorados pelo Git; devem ter uma cópia adicional em armazenamento de backup. A chave de assinatura é necessária para futuras atualizações sem desinstalar o pacote.
+
+Backups completos de preferências, dumps de sistema, dados do tablet, capturas de tela e chaves de assinatura ficam fora do repositório público. Este documento contém apenas o registro técnico necessário da configuração.
+
+## Ordem de trabalho combinada
+
+1. Fork com o código atual e registro completo da configuração.
+2. Somente depois, corrigir e validar os atalhos cortados do desktop.
+
+A versão registrada aqui continua sendo a 3.5.3, sem correção nova dos atalhos e sem macros de orientação.
